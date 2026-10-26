@@ -37,6 +37,7 @@ void SongCreationTerminal() {
 
             if (std::cin.fail()) {
                 std::cin.clear(); // Clear the error flag
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
                 std::cout << "Invalid input for year. Please enter a valid integer." << std::endl;
                 continue; // Restart the loop to get valid input
             }
