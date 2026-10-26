@@ -83,6 +83,7 @@ int main() {
 
                 if (std::cin.fail()) { // Fail-Safe for invalid input
                     std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 }
         }
     }
