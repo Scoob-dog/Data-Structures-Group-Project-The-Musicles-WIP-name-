@@ -1,11 +1,16 @@
 //This file should allow uploading of mp3 files
 //The user will be able to open their file explorer and select an mp3 file to upload to the database
 
+//TREAT THIS AS A ROUGH DRAFT! DO NOT TURN IN!
+
 #include <windows.h>
 #include <iostream>
 #include <string>
+#include <filesystem>
 
-void upload_mp3() {
+namespace fs = std::filesystem;
+
+fs::path upload_mp3() {
     WCHAR buffer[MAX_PATH] = L"";
 
     OPENFILENAMEW ofn = {};
@@ -18,14 +23,31 @@ void upload_mp3() {
     ofn.Flags = OFN_EXPLORER | OFN_FILEMUSTEXIST;
 
     if (GetOpenFileNameW(&ofn)) {
-        std::wcout << L"Selected file: "
-                   << buffer << L"\n";
+        fs::path source = buffer;
+
+        fs::path destinationFolder = fs::path(std::getenv("USERPROFILE")) / L"OneDrive\\Desktop\\Mp3Player\\Music_Downloaded";
+        fs::path destination = destinationFolder / source.filename();
+
+        try {
+            fs::create_directories(destinationFolder); // make sure the folder exists
+
+            fs::copy_file(
+                source,
+                destination,
+                fs::copy_options::overwrite_existing
+            );
+
+            std::cout << "MP3 uploaded successfully!\n";
+            std::wcout << L"Saved to: " << destination.wstring() << L"\n";
+
+            return destination;   // <-- hand the path back
+        }
+        catch (const fs::filesystem_error& e) {
+            std::cerr << "Error copying file: " << e.what() << "\n";
+        }
     } else {
         std::cout << "No file selected.\n";
     }
-}
 
-int main() {
-    upload_mp3();
-    return 0;
-}   
+    return fs::path();   // empty path = nothing was uploaded
+}
