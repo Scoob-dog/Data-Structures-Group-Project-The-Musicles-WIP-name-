@@ -1,5 +1,10 @@
 //This is the Terminal file that will put all the code together to seamlessly run the program.
 //In the future, this program will hopefully have UI instead of a terminal!
+
+
+//TREAT THIS AS A ROUGH DRAFT! DO NOT TURN IN!
+
+
 #include <iostream>
 #include <cstdlib>
 #include <string>
