@@ -1,4 +1,7 @@
 //Load songs into page
+
+//TREAT THIS AS A ROUGH DRAFT! DO NOT TURN IN!
+
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -34,4 +37,15 @@ void BrowsingSongsTerminal() {
     std::cout << "Type anything to continue: ";
     std::string TypeAnything;
     std::cin >> TypeAnything;
+
+    #include <cstdio> // for std::remove
+
+    if (TypeAnything == "Clear") {
+        if (std::remove("songs.csv") == 0) {
+            songCount = 0;
+            std::cout << "All songs cleared." << std::endl;
+        } else {
+            std::cerr << "Could not delete songs.csv" << std::endl;
+        }
+    }
 }
