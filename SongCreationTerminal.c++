@@ -1,7 +1,13 @@
+
+//TREAT THIS AS A ROUGH DRAFT! DO NOT TURN IN!
+
 #include <iostream>
 #include <cstdlib>
 #include <string>
 #include <fstream>
+#include <filesystem>
+#include <limits>
+#include "upload_mp3.C++"
 
 bool SongCreationPageIsActive = false;
 int year;
@@ -44,15 +50,21 @@ void SongCreationTerminal() {
             break; // Exit the loop if input is valid
         }
 
-        // Save the song details to a CSV file
+        // upload mp3 file and set it up so we can add it's directory 
 
-        std::ofstream file("songs.csv", std::ios::app);
-        if (file.is_open()) {
-            file << name << "," << album << "," << artist << "," << genre << "," << year << std::endl;
-            file.close();
-            std::cout << "Song added to database successfully!" << std::endl;
+        fs::path mp3Path = upload_mp3();
+
+        if (mp3Path.empty()) {
+            std::cout << "No MP3 uploaded, song not saved." << std::endl;
         } else {
-            std::cout << "Error opening file!" << std::endl;
+            std::ofstream file("songs.csv", std::ios::app);
+            if (file.is_open()) {
+                file << name << "," << album << "," << artist << "," << genre << ","<< year << "," << mp3Path.string() << std::endl;
+                file.close();
+                std::cout << "Song added to database successfully!" << std::endl;
+            } else {
+                std::cout << "Error opening file!" << std::endl;
+            }
         }
 
         std::cout << "Type anything to continue: ";
